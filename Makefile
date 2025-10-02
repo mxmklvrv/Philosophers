@@ -6,7 +6,7 @@
 #    By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/02 17:02:31 by mklevero          #+#    #+#              #
-#    Updated: 2025/10/02 17:09:20 by mklevero         ###   ########.fr        #
+#    Updated: 2025/10/02 17:16:32 by mklevero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ PHILO_HEAD = ./include/philo.h
 
 SRC = main.c
 
-OBJS = = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
+OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
+.SECONDARY: $(OBJS)
 
 all: $(NAME)
 
