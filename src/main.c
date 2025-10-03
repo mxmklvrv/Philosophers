@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/02 17:12:43 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/03 16:34:19 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,5 @@
 
 int	main(void)
 {
-	printf("test\n");
-	return (0);
+	t_trattoria table;
 }
