@@ -6,7 +6,7 @@
 #    By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/02 17:02:31 by mklevero          #+#    #+#              #
-#    Updated: 2025/10/02 17:16:32 by mklevero         ###   ########.fr        #
+#    Updated: 2025/10/03 17:39:32 by mklevero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC_DIR = src/
 HEADERS = -I ./include
 PHILO_HEAD = ./include/philo.h
 
-SRC = main.c
+SRC = main.c utils.c
 
 OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 .SECONDARY: $(OBJS)
