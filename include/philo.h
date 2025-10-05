@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/03 19:24:21 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/05 14:09:49 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@
 typedef struct s_trattoria	t_trattoria;
 
 // error messages
-# define ERROR_AC "Wrong number of arguments\nUsage: [number_of_philosophers]"
+# define ERROR_AC "Wrong number of arguments\nUsage: [number_of_philosophers] "
 # define ERROR_AC1 "[time_to_die] [time_to_eat] [time_to_sleep] (optional "
 # define ERROR_AC2 "[number_of_times_each_philosopher_must_eat])\n"
 # define ERROR_EMPT "Error: Empty input"
+# define ERROR_INPT "Error: Only digidts allowed"
+# define ERROR_NGTV "Error: Negative numbers are not allowed"
+
 
 
 typedef struct s_fork
@@ -73,5 +76,7 @@ void						error_message(const char *msg);
 // utils
 size_t						ft_strlen(const char *s);
 bool						is_space(char c);
+bool	ft_isdigit(char c);
+
 
 #endif
