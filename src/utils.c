@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 17:18:26 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/03 19:28:44 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/07 15:56:36 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ size_t	ft_strlen(const char *s)
 		i++;
 	return (i);
 }
-bool	is_space(char c)
+bool	ft_isspace(char c)
 {
 	return ((c >= 9 && c <= 13) || c == 32);
 }
