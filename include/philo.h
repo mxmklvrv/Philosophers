@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/05 14:09:49 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/07 16:36:48 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct s_trattoria	t_trattoria;
 # define ERROR_EMPT "Error: Empty input"
 # define ERROR_INPT "Error: Only digidts allowed"
 # define ERROR_NGTV "Error: Negative numbers are not allowed"
+# define ERROR_OVRF "Error: Overflow detected"
+# define ERROR_ZERO "Error: Number cannot be 0"
 
 
 
@@ -46,7 +48,7 @@ typedef struct s_philo
 {
 	int						id;
 	int						portion_count;
-	int						last_portion;
+	int						last_portion_time;
 	t_fork					*left_fork;
 	t_fork					*right_fork;
 	pthread_t				thread;
@@ -58,7 +60,7 @@ struct						s_trattoria
 	int						philo_nbr;
 	size_t					time_to_die;
 	size_t					time_to_eat;
-	size_t					time_to_slep;
+	size_t					time_to_sleep;
 	size_t					time_start;
 	int						portion_limit;
 	t_fork					*forks;
@@ -70,13 +72,22 @@ int							main(int ac, char **av);
 
 // validation
 bool						check_arg_count(int ac);
+bool	                    check_input(char **av);
+bool    is_overflow_or_zero(const char *str);
+
+// init_data
+bool    init_data(int ac, char **av, t_trattoria *table);
+int     get_int(const char *str);
+size_t get_time(void);
+
+
 
 // errors
 void						error_message(const char *msg);
 // utils
 size_t						ft_strlen(const char *s);
-bool						is_space(char c);
-bool	ft_isdigit(char c);
+bool						ft_isspace(char c);
+bool	                    ft_isdigit(char c);
 
 
 #endif
