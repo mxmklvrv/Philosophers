@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/08 14:50:27 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/08 18:46:28 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 // int		get_int(const char *str);
 // bool	is_overflow_or_zero(const char *str);
 // bool	init_data(int ac, char **av, t_trattoria *table);
+// void	*prot_alloc(size_t bytes, t_trattoria *table);
+// void	full_free(t_trattoria *table);
 
 // solid input ./philo 4 800 200 200 [5]
 
@@ -51,6 +53,11 @@ int	main(int ac, char **av)
 
 bool	init_data(int ac, char **av, t_trattoria *table)
 {
+	init_table(ac, av, table);
+	return (SUCCESS);
+}
+void	init_table(int ac, char **av, t_trattoria *table)
+{
 	table->philo_nbr = get_int(av[1]);
 	table->time_to_die = get_int(av[2]);
 	table->time_to_eat = get_int(av[3]);
@@ -60,8 +67,29 @@ bool	init_data(int ac, char **av, t_trattoria *table)
 	else
 		table->portion_limit = -1;
 	table->time_start = get_time();
-	return (SUCCESS);
+	table->philos = prot_alloc(sizeof(t_philo) * table->philo_nbr, table);
+	table->forks = prot_alloc(sizeof(t_pmtx) * table->philo_nbr, table);
 }
+
+void	*prot_alloc(size_t bytes, t_trattoria *table)
+{
+	void	*res;
+
+	res = malloc(bytes);
+	if (res == NULL)
+	{
+		error_message(ERROR_MEM);
+		full_free(table);
+		exit(FAILURE);
+	}
+	return (res);
+}
+void	full_free(t_trattoria *table)
+{
+	free(table->philos);
+	free(table->forks);
+}
+
 // get_time in milliseconds
 size_t	get_time(void)
 {

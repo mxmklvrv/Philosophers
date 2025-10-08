@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/08 14:50:25 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/08 18:47:18 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define FAILURE 1
 
 typedef struct s_trattoria	t_trattoria;
+typedef pthread_mutex_t		t_pmtx;
 
 // error messages
 # define ERROR_AC "Wrong number of arguments\nUsage: [number_of_philosophers] "
@@ -35,25 +36,20 @@ typedef struct s_trattoria	t_trattoria;
 # define ERROR_NGTV "Error: Negative numbers are not allowed\n"
 # define ERROR_OVRF "Error: Overflow detected\n"
 # define ERROR_ZERO "Error: Number cannot be 0\n"
-
-typedef struct s_fork
-{
-	pthread_mutex_t			fork;
-	int						fork_id;
-}							t_fork;
+# define ERROR_MEM "Error: memory allocation failed\n"
 
 typedef struct s_philo
 {
 	int						id;
 	int						portion_count;
 	int						last_portion_time;
-	t_fork					*left_fork;
-	t_fork					*right_fork;
 	pthread_t				thread;
+	t_pmtx					*left_fork;
+	t_pmtx					*right_fork;
 	t_trattoria				*trattoria;
 }							t_philo;
 
-struct						s_trattoria
+typedef struct s_trattoria
 {
 	int						philo_nbr;
 	size_t					time_to_die;
@@ -61,9 +57,9 @@ struct						s_trattoria
 	size_t					time_to_sleep;
 	size_t					time_start;
 	int						portion_limit;
-	t_fork					*forks;
+	t_pmtx					*forks;
 	t_philo					*philos;
-};
+}							t_trattoria;
 
 // main
 int							main(int ac, char **av);
@@ -75,11 +71,15 @@ bool						is_overflow_or_zero(const char *str);
 
 // init_data
 bool						init_data(int ac, char **av, t_trattoria *table);
+void						init_table(int ac, char **av, t_trattoria *table);
 int							get_int(const char *str);
 size_t						get_time(void);
 
-// errors
+// errors and free
 void						error_message(const char *msg);
+void						*prot_alloc(size_t bytes, t_trattoria *table);
+void						full_free(t_trattoria *table);
+
 // utils
 size_t						ft_strlen(const char *s);
 bool						ft_isspace(char c);
