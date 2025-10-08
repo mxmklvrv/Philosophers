@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/07 16:36:48 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/08 14:50:25 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,11 @@ typedef struct s_trattoria	t_trattoria;
 # define ERROR_AC "Wrong number of arguments\nUsage: [number_of_philosophers] "
 # define ERROR_AC1 "[time_to_die] [time_to_eat] [time_to_sleep] (optional "
 # define ERROR_AC2 "[number_of_times_each_philosopher_must_eat])\n"
-# define ERROR_EMPT "Error: Empty input"
-# define ERROR_INPT "Error: Only digidts allowed"
-# define ERROR_NGTV "Error: Negative numbers are not allowed"
-# define ERROR_OVRF "Error: Overflow detected"
-# define ERROR_ZERO "Error: Number cannot be 0"
-
-
+# define ERROR_EMPT "Error: Empty input\n"
+# define ERROR_INPT "Error: Only digidts allowed\n"
+# define ERROR_NGTV "Error: Negative numbers are not allowed\n"
+# define ERROR_OVRF "Error: Overflow detected\n"
+# define ERROR_ZERO "Error: Number cannot be 0\n"
 
 typedef struct s_fork
 {
@@ -72,22 +70,19 @@ int							main(int ac, char **av);
 
 // validation
 bool						check_arg_count(int ac);
-bool	                    check_input(char **av);
-bool    is_overflow_or_zero(const char *str);
+bool						check_input(char **av);
+bool						is_overflow_or_zero(const char *str);
 
 // init_data
-bool    init_data(int ac, char **av, t_trattoria *table);
-int     get_int(const char *str);
-size_t get_time(void);
-
-
+bool						init_data(int ac, char **av, t_trattoria *table);
+int							get_int(const char *str);
+size_t						get_time(void);
 
 // errors
 void						error_message(const char *msg);
 // utils
 size_t						ft_strlen(const char *s);
 bool						ft_isspace(char c);
-bool	                    ft_isdigit(char c);
-
+bool						ft_isdigit(char c);
 
 #endif
