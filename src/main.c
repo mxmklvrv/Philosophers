@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/09 18:22:29 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/09 22:01:41 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,24 @@ void init_philos(t_trattoria *table)
     }
     
 }
+
+bool   control_mutex(t_pmtx *mutex, t_oper oper)
+{
+    if (oper == INIT)
+    {
+        if(pthread_mutex_init(mutex, NULL) != 0)
+            return (FAILURE);
+    }
+    else if(oper == LOCK)
+        pthread_mutex_lock(mutex);
+    else if (oper == UNLOCK)
+        pthread_mutex_unlock(mutex);
+    else if (oper == DESTROY)
+        pthread_mutex_destroy(mutex);
+    return (SUCCESS);
+}
+
+
 
 void    assign_forks(t_trattoria *table, t_philo *philo, int i)
 {
