@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/08 18:46:28 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/09 18:22:29 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 // int		get_int(const char *str);
 // bool	is_overflow_or_zero(const char *str);
 // bool	init_data(int ac, char **av, t_trattoria *table);
-// void	*prot_alloc(size_t bytes, t_trattoria *table);
 // void	full_free(t_trattoria *table);
 
 // solid input ./philo 4 800 200 200 [5]
@@ -53,10 +52,47 @@ int	main(int ac, char **av)
 
 bool	init_data(int ac, char **av, t_trattoria *table)
 {
-	init_table(ac, av, table);
+	if (init_table(ac, av, table) == FAILURE)
+        return (FAILURE);
+    init_philos(table);
+    
 	return (SUCCESS);
 }
-void	init_table(int ac, char **av, t_trattoria *table)
+
+void init_philos(t_trattoria *table)
+{
+    int i;
+    t_philo *philo;
+    
+    i = 0;
+    while(i < table->philo_nbr)
+    {
+       philo = table->philos + i;
+       philo->id = i + 1;
+       philo->portion_count = 0;
+       philo->table = table;
+       assign_forks(table, philo, i);
+       i++;
+    }
+    
+}
+
+void    assign_forks(t_trattoria *table, t_philo *philo, int i)
+{
+    if(philo->id % 2) // odd
+    {
+        philo->first_fork = &table->forks[(i + 1) % table->philo_nbr]; // rigth
+        philo->second_fork = &table->forks[i]; // left
+    }
+    else // even 
+    {
+        philo->first_fork = &table->forks[i]; // left
+        philo->second_fork = &table->forks[(i + 1) % table->philo_nbr]; // right
+    }
+}
+
+
+bool	init_table(int ac, char **av, t_trattoria *table)
 {
 	table->philo_nbr = get_int(av[1]);
 	table->time_to_die = get_int(av[2]);
@@ -67,23 +103,19 @@ void	init_table(int ac, char **av, t_trattoria *table)
 	else
 		table->portion_limit = -1;
 	table->time_start = get_time();
-	table->philos = prot_alloc(sizeof(t_philo) * table->philo_nbr, table);
-	table->forks = prot_alloc(sizeof(t_pmtx) * table->philo_nbr, table);
+	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
+    if(!table->philos)
+        return(error_message(ERROR_MEM), FAILURE);
+	table->forks = malloc(sizeof(t_pmtx) * table->philo_nbr);
+    if(!table->forks)
+    {
+        full_free(table);
+        return(error_message(ERROR_MEM), FAILURE);
+    }
+    return (SUCCESS);
 }
 
-void	*prot_alloc(size_t bytes, t_trattoria *table)
-{
-	void	*res;
 
-	res = malloc(bytes);
-	if (res == NULL)
-	{
-		error_message(ERROR_MEM);
-		full_free(table);
-		exit(FAILURE);
-	}
-	return (res);
-}
 void	full_free(t_trattoria *table)
 {
 	free(table->philos);
