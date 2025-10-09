@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/08 18:47:18 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/09 18:39:31 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ typedef struct s_philo
 	int						portion_count;
 	int						last_portion_time;
 	pthread_t				thread;
-	t_pmtx					*left_fork;
-	t_pmtx					*right_fork;
-	t_trattoria				*trattoria;
+	t_pmtx					*first_fork;
+	t_pmtx					*second_fork;
+	t_trattoria				*table;
 }							t_philo;
 
 typedef struct s_trattoria
@@ -71,13 +71,14 @@ bool						is_overflow_or_zero(const char *str);
 
 // init_data
 bool						init_data(int ac, char **av, t_trattoria *table);
-void						init_table(int ac, char **av, t_trattoria *table);
+bool	init_table(int ac, char **av, t_trattoria *table);
+void init_philos(t_trattoria *table);
+void    assign_forks(t_trattoria *table, t_philo *philo, int i);
 int							get_int(const char *str);
 size_t						get_time(void);
 
 // errors and free
 void						error_message(const char *msg);
-void						*prot_alloc(size_t bytes, t_trattoria *table);
 void						full_free(t_trattoria *table);
 
 // utils
