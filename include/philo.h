@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/09 18:39:31 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/09 22:01:39 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,18 @@ typedef pthread_mutex_t		t_pmtx;
 # define ERROR_OVRF "Error: Overflow detected\n"
 # define ERROR_ZERO "Error: Number cannot be 0\n"
 # define ERROR_MEM "Error: memory allocation failed\n"
+
+typedef enum e_oper
+{
+    DESTROY,
+    INIT,
+    LOCK,
+    DETACH,
+    UNLOCK,
+    JOIN,
+    CREATE,
+} t_oper;
+
 
 typedef struct s_philo
 {
@@ -71,11 +83,14 @@ bool						is_overflow_or_zero(const char *str);
 
 // init_data
 bool						init_data(int ac, char **av, t_trattoria *table);
-bool	init_table(int ac, char **av, t_trattoria *table);
-void init_philos(t_trattoria *table);
-void    assign_forks(t_trattoria *table, t_philo *philo, int i);
+bool	                    init_table(int ac, char **av, t_trattoria *table);
+void                        init_philos(t_trattoria *table);
+void                        assign_forks(t_trattoria *table, t_philo *philo, int i);
 int							get_int(const char *str);
 size_t						get_time(void);
+// mutex 
+bool   control_mutex(t_pmtx *mutex, t_oper oper);
+
 
 // errors and free
 void						error_message(const char *msg);
