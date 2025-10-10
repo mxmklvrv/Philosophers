@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/09 22:01:41 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/10 12:44:36 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ int	main(int ac, char **av)
 bool	init_data(int ac, char **av, t_trattoria *table)
 {
 	if (init_table(ac, av, table) == FAILURE)
-        return (FAILURE);
+        return (free_allocs(table), FAILURE);
+    if (init_mutexes(table) == FAILURE)
+        return (free_allocs(table), FAILURE);
     init_philos(table);
     
 	return (SUCCESS);
@@ -75,6 +77,28 @@ void init_philos(t_trattoria *table)
        i++;
     }
     
+}
+
+bool init_mutexes(t_trattoria *table)
+{
+    int i;
+    
+    i = 0;
+    while (i < table->philo_nbr)
+    {
+        if(control_mutex(&table->forks[i], INIT) == FAILURE)
+            return (destroy_forks(table, i), FAILURE);
+        i++;
+    }
+    // the rest of mutexes
+    
+    return (SUCCESS);
+}
+
+void    destroy_forks(t_trattoria *table, int qty)
+{
+    while(--qty >= 0)
+        control_mutex(&table->forks[qty], DESTROY);
 }
 
 bool   control_mutex(t_pmtx *mutex, t_oper oper)
@@ -126,18 +150,17 @@ bool	init_table(int ac, char **av, t_trattoria *table)
         return(error_message(ERROR_MEM), FAILURE);
 	table->forks = malloc(sizeof(t_pmtx) * table->philo_nbr);
     if(!table->forks)
-    {
-        full_free(table);
         return(error_message(ERROR_MEM), FAILURE);
-    }
     return (SUCCESS);
 }
 
 
-void	full_free(t_trattoria *table)
+void	free_allocs(t_trattoria *table)
 {
-	free(table->philos);
-	free(table->forks);
+    if(table->philos)
+        free(table->philos);
+    if(table->forks)
+        free(table->forks);
 }
 
 // get_time in milliseconds
