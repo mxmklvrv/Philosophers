@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/09 22:01:39 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/10 12:16:09 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ bool   control_mutex(t_pmtx *mutex, t_oper oper);
 
 // errors and free
 void						error_message(const char *msg);
-void						full_free(t_trattoria *table);
+void	free_allocs(t_trattoria *table);
 
 // utils
 size_t						ft_strlen(const char *s);
