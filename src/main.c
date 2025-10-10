@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/10 12:44:36 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/10 14:28:52 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,86 +53,80 @@ int	main(int ac, char **av)
 bool	init_data(int ac, char **av, t_trattoria *table)
 {
 	if (init_table(ac, av, table) == FAILURE)
-        return (free_allocs(table), FAILURE);
-    if (init_mutexes(table) == FAILURE)
-        return (free_allocs(table), FAILURE);
-    init_philos(table);
-    
+		return (free_allocs(table), FAILURE);
+	if (init_mutexes(table) == FAILURE)
+		return (free_allocs(table), FAILURE);
+	init_philos(table);
 	return (SUCCESS);
 }
 
-void init_philos(t_trattoria *table)
+void	init_philos(t_trattoria *table)
 {
-    int i;
-    t_philo *philo;
-    
-    i = 0;
-    while(i < table->philo_nbr)
-    {
-       philo = table->philos + i;
-       philo->id = i + 1;
-       philo->portion_count = 0;
-       philo->table = table;
-       assign_forks(table, philo, i);
-       i++;
-    }
-    
+	int		i;
+	t_philo	*philo;
+
+	i = 0;
+	while (i < table->philo_nbr)
+	{
+		philo = table->philos + i;
+		philo->id = i + 1;
+		philo->portion_count = 0;
+		philo->table = table;
+		assign_forks(table, philo, i);
+		i++;
+	}
 }
 
-bool init_mutexes(t_trattoria *table)
+bool	init_mutexes(t_trattoria *table)
 {
-    int i;
-    
-    i = 0;
-    while (i < table->philo_nbr)
-    {
-        if(control_mutex(&table->forks[i], INIT) == FAILURE)
-            return (destroy_forks(table, i), FAILURE);
-        i++;
-    }
-    // the rest of mutexes
-    
-    return (SUCCESS);
+	int	i;
+
+	i = 0;
+	while (i < table->philo_nbr)
+	{
+		if (control_mutex(&table->forks[i], INIT) == FAILURE)
+			return (destroy_forks(table, i), FAILURE);
+		i++;
+	}
+	// the rest of mutexes
+	return (SUCCESS);
 }
 
-void    destroy_forks(t_trattoria *table, int qty)
+void	destroy_forks(t_trattoria *table, int qty)
 {
-    while(--qty >= 0)
-        control_mutex(&table->forks[qty], DESTROY);
+	while (--qty >= 0)
+		control_mutex(&table->forks[qty], DESTROY);
 }
 
-bool   control_mutex(t_pmtx *mutex, t_oper oper)
+bool	control_mutex(t_pmtx *mutex, t_oper oper)
 {
-    if (oper == INIT)
-    {
-        if(pthread_mutex_init(mutex, NULL) != 0)
-            return (FAILURE);
-    }
-    else if(oper == LOCK)
-        pthread_mutex_lock(mutex);
-    else if (oper == UNLOCK)
-        pthread_mutex_unlock(mutex);
-    else if (oper == DESTROY)
-        pthread_mutex_destroy(mutex);
-    return (SUCCESS);
+	if (oper == INIT)
+	{
+		if (pthread_mutex_init(mutex, NULL) != 0)
+			return (FAILURE);
+	}
+	else if (oper == LOCK)
+		pthread_mutex_lock(mutex);
+	else if (oper == UNLOCK)
+		pthread_mutex_unlock(mutex);
+	else if (oper == DESTROY)
+		pthread_mutex_destroy(mutex);
+	return (SUCCESS);
 }
 
-
-
-void    assign_forks(t_trattoria *table, t_philo *philo, int i)
+void	assign_forks(t_trattoria *table, t_philo *philo, int i)
 {
-    if(philo->id % 2) // odd
-    {
-        philo->first_fork = &table->forks[(i + 1) % table->philo_nbr]; // rigth
-        philo->second_fork = &table->forks[i]; // left
-    }
-    else // even 
-    {
-        philo->first_fork = &table->forks[i]; // left
-        philo->second_fork = &table->forks[(i + 1) % table->philo_nbr]; // right
-    }
+	if (philo->id % 2) // odd
+	{
+		philo->first_fork = &table->forks[(i + 1) % table->philo_nbr]; // rigth
+		philo->second_fork = &table->forks[i];                         // left
+	}
+	else // even
+	{
+		philo->first_fork = &table->forks[i];                           // left
+		philo->second_fork = &table->forks[(i + 1) % table->philo_nbr]; // right
+	}
 }
-
 
 bool	init_table(int ac, char **av, t_trattoria *table)
 {
@@ -146,21 +140,20 @@ bool	init_table(int ac, char **av, t_trattoria *table)
 		table->portion_limit = -1;
 	table->time_start = get_time();
 	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
-    if(!table->philos)
-        return(error_message(ERROR_MEM), FAILURE);
+	if (!table->philos)
+		return (error_message(ERROR_MEM), FAILURE);
 	table->forks = malloc(sizeof(t_pmtx) * table->philo_nbr);
-    if(!table->forks)
-        return(error_message(ERROR_MEM), FAILURE);
-    return (SUCCESS);
+	if (!table->forks)
+		return (error_message(ERROR_MEM), FAILURE);
+	return (SUCCESS);
 }
-
 
 void	free_allocs(t_trattoria *table)
 {
-    if(table->philos)
-        free(table->philos);
-    if(table->forks)
-        free(table->forks);
+	if (table->philos)
+		free(table->philos);
+	if (table->forks)
+		free(table->forks);
 }
 
 // get_time in milliseconds

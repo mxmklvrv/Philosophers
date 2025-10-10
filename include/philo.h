@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/10 12:16:09 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/10 14:29:40 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ typedef pthread_mutex_t		t_pmtx;
 
 typedef enum e_oper
 {
-    DESTROY,
-    INIT,
-    LOCK,
-    DETACH,
-    UNLOCK,
-    JOIN,
-    CREATE,
-} t_oper;
-
+	DESTROY,
+	INIT,
+	LOCK,
+	DETACH,
+	UNLOCK,
+	JOIN,
+	CREATE,
+}							t_oper;
 
 typedef struct s_philo
 {
@@ -83,18 +82,20 @@ bool						is_overflow_or_zero(const char *str);
 
 // init_data
 bool						init_data(int ac, char **av, t_trattoria *table);
-bool	                    init_table(int ac, char **av, t_trattoria *table);
-void                        init_philos(t_trattoria *table);
-void                        assign_forks(t_trattoria *table, t_philo *philo, int i);
+bool						init_table(int ac, char **av, t_trattoria *table);
+void						init_philos(t_trattoria *table);
+void						assign_forks(t_trattoria *table, t_philo *philo,
+								int i);
 int							get_int(const char *str);
 size_t						get_time(void);
-// mutex 
-bool   control_mutex(t_pmtx *mutex, t_oper oper);
-
+// mutex
+bool						control_mutex(t_pmtx *mutex, t_oper oper);
+bool						init_mutexes(t_trattoria *table);
+void						destroy_forks(t_trattoria *table, int qty);
 
 // errors and free
 void						error_message(const char *msg);
-void	free_allocs(t_trattoria *table);
+void						free_allocs(t_trattoria *table);
 
 // utils
 size_t						ft_strlen(const char *s);
