@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/10 14:29:40 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/12 14:43:56 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef pthread_mutex_t		t_pmtx;
 # define ERROR_OVRF "Error: Overflow detected\n"
 # define ERROR_ZERO "Error: Number cannot be 0\n"
 # define ERROR_MEM "Error: memory allocation failed\n"
+# define ERROR_MTX_INIT "Error: mutex init failed\n"
 
 typedef enum e_oper
 {
@@ -68,8 +69,13 @@ typedef struct s_trattoria
 	size_t					time_to_sleep;
 	size_t					time_start;
 	int						portion_limit;
-	t_pmtx					*forks;
 	t_philo					*philos;
+    t_pmtx					*forks;
+    t_pmtx                  mtx_msg;
+    t_pmtx                  mtx_portion;
+    t_pmtx                  mtx_death;
+    
+    
 }							t_trattoria;
 
 // main
@@ -83,6 +89,7 @@ bool						is_overflow_or_zero(const char *str);
 // init_data
 bool						init_data(int ac, char **av, t_trattoria *table);
 bool						init_table(int ac, char **av, t_trattoria *table);
+bool	                    init_mutexes(t_trattoria *table);
 void						init_philos(t_trattoria *table);
 void						assign_forks(t_trattoria *table, t_philo *philo,
 								int i);
