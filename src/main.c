@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/10 14:28:52 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/12 14:40:15 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,158 +50,6 @@ int	main(int ac, char **av)
 		printf("ok\n"); // test output
 }
 
-bool	init_data(int ac, char **av, t_trattoria *table)
-{
-	if (init_table(ac, av, table) == FAILURE)
-		return (free_allocs(table), FAILURE);
-	if (init_mutexes(table) == FAILURE)
-		return (free_allocs(table), FAILURE);
-	init_philos(table);
-	return (SUCCESS);
-}
-
-void	init_philos(t_trattoria *table)
-{
-	int		i;
-	t_philo	*philo;
-
-	i = 0;
-	while (i < table->philo_nbr)
-	{
-		philo = table->philos + i;
-		philo->id = i + 1;
-		philo->portion_count = 0;
-		philo->table = table;
-		assign_forks(table, philo, i);
-		i++;
-	}
-}
-
-bool	init_mutexes(t_trattoria *table)
-{
-	int	i;
-
-	i = 0;
-	while (i < table->philo_nbr)
-	{
-		if (control_mutex(&table->forks[i], INIT) == FAILURE)
-			return (destroy_forks(table, i), FAILURE);
-		i++;
-	}
-	// the rest of mutexes
-	return (SUCCESS);
-}
-
-void	destroy_forks(t_trattoria *table, int qty)
-{
-	while (--qty >= 0)
-		control_mutex(&table->forks[qty], DESTROY);
-}
-
-bool	control_mutex(t_pmtx *mutex, t_oper oper)
-{
-	if (oper == INIT)
-	{
-		if (pthread_mutex_init(mutex, NULL) != 0)
-			return (FAILURE);
-	}
-	else if (oper == LOCK)
-		pthread_mutex_lock(mutex);
-	else if (oper == UNLOCK)
-		pthread_mutex_unlock(mutex);
-	else if (oper == DESTROY)
-		pthread_mutex_destroy(mutex);
-	return (SUCCESS);
-}
-
-void	assign_forks(t_trattoria *table, t_philo *philo, int i)
-{
-	if (philo->id % 2) // odd
-	{
-		philo->first_fork = &table->forks[(i + 1) % table->philo_nbr]; // rigth
-		philo->second_fork = &table->forks[i];                         // left
-	}
-	else // even
-	{
-		philo->first_fork = &table->forks[i];                           // left
-		philo->second_fork = &table->forks[(i + 1) % table->philo_nbr]; // right
-	}
-}
-
-bool	init_table(int ac, char **av, t_trattoria *table)
-{
-	table->philo_nbr = get_int(av[1]);
-	table->time_to_die = get_int(av[2]);
-	table->time_to_eat = get_int(av[3]);
-	table->time_to_sleep = get_int(av[4]);
-	if (ac == 6)
-		table->portion_limit = get_int(av[5]);
-	else
-		table->portion_limit = -1;
-	table->time_start = get_time();
-	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
-	if (!table->philos)
-		return (error_message(ERROR_MEM), FAILURE);
-	table->forks = malloc(sizeof(t_pmtx) * table->philo_nbr);
-	if (!table->forks)
-		return (error_message(ERROR_MEM), FAILURE);
-	return (SUCCESS);
-}
-
-void	free_allocs(t_trattoria *table)
-{
-	if (table->philos)
-		free(table->philos);
-	if (table->forks)
-		free(table->forks);
-}
-
-// get_time in milliseconds
-size_t	get_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
-
-int	get_int(const char *str)
-{
-	int	i;
-	int	res;
-
-	i = 0;
-	res = 0;
-	while (ft_isspace(str[i]))
-		i++;
-	while (ft_isdigit(str[i]))
-	{
-		res = res * 10 + str[i] - '0';
-		i++;
-	}
-	return (res);
-}
-
-bool	is_overflow_or_zero(const char *str)
-{
-	long long	res;
-	int			i;
-
-	i = 0;
-	res = 0;
-	while (ft_isspace(str[i]))
-		i++;
-	while (ft_isdigit(str[i]))
-	{
-		res = res * 10 + (str[i] - '0');
-		if (res > INT_MAX)
-			return (error_message(ERROR_OVRF), FAILURE);
-		i++;
-	}
-	if (res == 0)
-		return (error_message(ERROR_ZERO), FAILURE);
-	return (SUCCESS);
-}
 
 bool	check_arg_count(int ac)
 {
@@ -213,11 +61,6 @@ bool	check_arg_count(int ac)
 	return (SUCCESS);
 }
 
-void	error_message(const char *msg)
-{
-	write(2, msg, ft_strlen(msg));
-	return ;
-}
 
 bool	check_input(char **av)
 {
@@ -244,6 +87,189 @@ bool	check_input(char **av)
 	}
 	return (SUCCESS);
 }
+
+// checks int for 0 and overflow 
+bool	is_overflow_or_zero(const char *str)
+{
+	long long	res;
+	int			i;
+
+	i = 0;
+	res = 0;
+	while (ft_isspace(str[i]))
+		i++;
+	while (ft_isdigit(str[i]))
+	{
+		res = res * 10 + (str[i] - '0');
+		if (res > INT_MAX)
+			return (error_message(ERROR_OVRF), FAILURE);
+		i++;
+	}
+	if (res == 0)
+		return (error_message(ERROR_ZERO), FAILURE);
+	return (SUCCESS);
+}
+
+// init all the data 
+bool	init_data(int ac, char **av, t_trattoria *table)
+{
+	if (init_table(ac, av, table) == FAILURE)
+		return (free_allocs(table), FAILURE);
+	if (init_mutexes(table) == FAILURE)
+		return (free_allocs(table), FAILURE);
+	init_philos(table);
+	return (SUCCESS);
+}
+
+// init table struct 
+bool	init_table(int ac, char **av, t_trattoria *table)
+{
+	table->philo_nbr = get_int(av[1]);
+	table->time_to_die = get_int(av[2]);
+	table->time_to_eat = get_int(av[3]);
+	table->time_to_sleep = get_int(av[4]);
+	if (ac == 6)
+		table->portion_limit = get_int(av[5]);
+	else
+		table->portion_limit = -1;
+	table->time_start = get_time();
+	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
+	if (!table->philos)
+		return (error_message(ERROR_MEM), FAILURE);
+	table->forks = malloc(sizeof(t_pmtx) * table->philo_nbr);
+	if (!table->forks)
+		return (error_message(ERROR_MEM), FAILURE);
+	return (SUCCESS);
+}
+
+// maybe mass mutex destroyer so i pass table and 3 more of mutexes 
+bool	init_mutexes(t_trattoria *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->philo_nbr)
+	{
+		if (control_mutex(&table->forks[i], INIT) == FAILURE)
+			return (destroy_forks(table, i), FAILURE);
+		i++;
+	}
+	if(control_mutex(&table->mtx_msg, INIT) == FAILURE)
+        return (destroy_forks(table, table->philo_nbr), FAILURE);
+    if(control_mutex(&table->mtx_portion, INIT) == FAILURE)
+    {
+        control_mutex(&table->mtx_msg, DESTROY);
+        return (destroy_forks(table, table->philo_nbr), FAILURE);
+    }
+    if(control_mutex(&table->mtx_death, INIT) == FAILURE)
+    {
+        control_mutex(&table->mtx_msg, DESTROY);
+        control_mutex(&table->mtx_portion, DESTROY);
+        return (destroy_forks(table, table->philo_nbr), FAILURE);
+    }
+	return (SUCCESS);
+}
+
+void	init_philos(t_trattoria *table)
+{
+	int		i;
+	t_philo	*philo;
+
+	i = 0;
+	while (i < table->philo_nbr)
+	{
+		philo = table->philos + i;
+		philo->id = i + 1;
+		philo->portion_count = 0;
+		philo->table = table;
+		assign_forks(table, philo, i);
+		i++;
+	}
+}
+void	assign_forks(t_trattoria *table, t_philo *philo, int i)
+{
+	if (philo->id % 2) // odd
+	{
+		philo->first_fork = &table->forks[(i + 1) % table->philo_nbr]; // rigth
+		philo->second_fork = &table->forks[i];                         // left
+	}
+	else // even
+	{
+		philo->first_fork = &table->forks[i];                           // left
+		philo->second_fork = &table->forks[(i + 1) % table->philo_nbr]; // right
+	}
+}
+
+void	destroy_forks(t_trattoria *table, int qty)
+{
+	int i;
+
+    i = -1;
+    while(++i < qty)
+        control_mutex(&table->forks[i], DESTROY);
+}
+
+
+bool	control_mutex(t_pmtx *mutex, t_oper oper)
+{
+	if (oper == INIT)
+	{
+		if (pthread_mutex_init(mutex, NULL) != 0)
+			return (error_message(ERROR_MTX_INIT), FAILURE);
+	}
+	else if (oper == LOCK)
+		pthread_mutex_lock(mutex);
+	else if (oper == UNLOCK)
+		pthread_mutex_unlock(mutex);
+	else if (oper == DESTROY)
+		pthread_mutex_destroy(mutex);
+	return (SUCCESS);
+}
+
+
+// free allocated memmory for *philos and *forks
+void	free_allocs(t_trattoria *table)
+{
+	if (table->forks)
+		free(table->forks);
+    if (table->philos)
+		free(table->philos);
+	
+}
+
+// get_time in milliseconds
+size_t	get_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+// get int from the input 
+int	get_int(const char *str)
+{
+	int	i;
+	int	res;
+
+	i = 0;
+	res = 0;
+	while (ft_isspace(str[i]))
+		i++;
+	while (ft_isdigit(str[i]))
+	{
+		res = res * 10 + str[i] - '0';
+		i++;
+	}
+	return (res);
+}
+
+void	error_message(const char *msg)
+{
+	write(2, msg, ft_strlen(msg));
+	return ;
+}
+
+
 
 // // remove from main below, for test usage
 // bool	ft_isdigit(char c)
