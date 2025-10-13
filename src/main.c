@@ -6,36 +6,15 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/12 14:40:15 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/12 14:54:49 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-// remove below
-// #include <limits.h>  // INT_MAX
-// #include <pthread.h> // mutex
-// #include <stdbool.h> // true/false
-// #include <stdio.h>   // printf
-// #include <stdlib.h>  // malloc free
-// #include <sys/time.h>
-// #include <unistd.h> // write usleep
-
-// bool	ft_isdigit(char c);
-// size_t	ft_strlen(const char *s);
-// bool	ft_isspace(char c);
-// bool	check_input(char **av);
-// void	error_message(const char *msg);
-// bool	check_arg_count(int ac);
-// int		get_int(const char *str);
-// bool	is_overflow_or_zero(const char *str);
-// bool	init_data(int ac, char **av, t_trattoria *table);
-// void	full_free(t_trattoria *table);
-
-// solid input ./philo 4 800 200 200 [5]
-
-// remove up
-
+//TODO:
+// mass destroyer
+// next is ti start digging in start of simulation
+// thread creation
 int	main(int ac, char **av)
 {
 	t_trattoria	table;
@@ -169,6 +148,11 @@ bool	init_mutexes(t_trattoria *table)
     }
 	return (SUCCESS);
 }
+// maybe mass mutex destroyer so i pass table and 3 more of mutexes  
+void    mass_destroyer()
+{
+    
+}
 
 void	init_philos(t_trattoria *table)
 {
@@ -268,26 +252,3 @@ void	error_message(const char *msg)
 	write(2, msg, ft_strlen(msg));
 	return ;
 }
-
-
-
-// // remove from main below, for test usage
-// bool	ft_isdigit(char c)
-// {
-// 	return (c >= '0' && c <= '9');
-// }
-
-// size_t	ft_strlen(const char *s)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (s[i])
-// 		i++;
-// 	return (i);
-// }
-// bool	ft_isspace(char c)
-// {
-// 	return ((c >= 9 && c <= 13) || c == 32);
-// }
-// // remove from main up, for test usage
