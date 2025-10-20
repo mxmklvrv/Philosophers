@@ -6,15 +6,14 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/12 14:54:49 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/20 17:39:50 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 //TODO:
-// mass destroyer
 // next is ti start digging in start of simulation
-// thread creation
+// thread creation and join
 int	main(int ac, char **av)
 {
 	t_trattoria	table;
@@ -25,8 +24,34 @@ int	main(int ac, char **av)
 		return (FAILURE);
 	if (init_data(ac, av, &table) == FAILURE)
 		return (FAILURE);
+    if (start_simulation(&table) == FAILURE)
+        return (FAILURE);
 	else
 		printf("ok\n"); // test output
+}
+
+bool start_simulation(t_trattoria *table)
+{
+    if(creat_threads(table) == FAILURE)
+        return (wipe_off(table), FAILURE);
+    
+}
+
+bool create_threads(t_trattoria *table)
+{
+    int i;
+    
+    i = 0;
+    while (i < table->philo_nbr)
+    {
+        if(control_threads(&table->philos[i].thread, &table->philos[i], function, CREATE) == FAILURE)
+        {
+            table->stop = 1;
+            // join threads
+            // return fail
+        }
+        
+    }
 }
 
 
@@ -148,10 +173,17 @@ bool	init_mutexes(t_trattoria *table)
     }
 	return (SUCCESS);
 }
-// maybe mass mutex destroyer so i pass table and 3 more of mutexes  
-void    mass_destroyer()
+// full quit
+void    wipe_off(t_trattoria *table)
 {
-    
+    if(!table)
+        return;
+    destroy_forks(table, table->philo_nbr);
+    // probably need to add thread reemover or so
+    control_mutex(&table->mtx_msg,DESTROY);
+    control_mutex(&table->mtx_death, DESTROY);
+    control_mutex(&table->mtx_portion, DESTROY);
+    free_allocs(table);
 }
 
 void	init_philos(t_trattoria *table)
@@ -193,7 +225,22 @@ void	destroy_forks(t_trattoria *table, int qty)
         control_mutex(&table->forks[i], DESTROY);
 }
 
+// wrapper function to control threads
+bool    control_threads(pthread_t *th, void *data, void *(*function)(void *), t_oper oper)
+{
+    if(oper == CREATE)
+    {
+        if (pthread_create(th, NULL, function, data) != 0)
+            return (error_message(ERROR_TH_CREATE), FAILURE);
+    }
+    else if (oper == JOIN)
+    {
+        if (pthread_join(*th, NULL) != 0)
+            return (error_message(ERROR_TH_JOIN), FAILURE);
+    }
+}
 
+// wrapper function to control mutexes
 bool	control_mutex(t_pmtx *mutex, t_oper oper)
 {
 	if (oper == INIT)
@@ -218,7 +265,6 @@ void	free_allocs(t_trattoria *table)
 		free(table->forks);
     if (table->philos)
 		free(table->philos);
-	
 }
 
 // get_time in milliseconds
