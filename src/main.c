@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/20 17:39:50 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/21 13:32:01 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,17 @@ bool create_threads(t_trattoria *table)
             // return fail
         }
         
+    }
+}
+bool    join_threads(t_trattoria *table, int qty)
+{
+    int i;
+
+    i = 0;
+    while(i < qty)
+    {
+        if(control_threads(&table->philos[i].thread, NULL, NULL, JOIN) == FAILURE)
+            
     }
 }
 
@@ -165,7 +176,7 @@ bool	init_mutexes(t_trattoria *table)
         control_mutex(&table->mtx_msg, DESTROY);
         return (destroy_forks(table, table->philo_nbr), FAILURE);
     }
-    if(control_mutex(&table->mtx_death, INIT) == FAILURE)
+    if(control_mutex(&table->mtx_stop, INIT) == FAILURE)
     {
         control_mutex(&table->mtx_msg, DESTROY);
         control_mutex(&table->mtx_portion, DESTROY);
@@ -181,7 +192,7 @@ void    wipe_off(t_trattoria *table)
     destroy_forks(table, table->philo_nbr);
     // probably need to add thread reemover or so
     control_mutex(&table->mtx_msg,DESTROY);
-    control_mutex(&table->mtx_death, DESTROY);
+    control_mutex(&table->mtx_stop, DESTROY);
     control_mutex(&table->mtx_portion, DESTROY);
     free_allocs(table);
 }
