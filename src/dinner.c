@@ -1,41 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   dinner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 17:18:26 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/22 18:36:55 by mklevero         ###   ########.fr       */
+/*   Created: 2025/10/22 18:04:16 by mklevero          #+#    #+#             */
+/*   Updated: 2025/10/22 18:53:23 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-bool	ft_isdigit(char c)
+void	*dinner(void *arg)
 {
-	return (c >= '0' && c <= '9');
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
 }
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
+// eat
+// sleep
+// think
+// write message
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-bool	ft_isspace(char c)
+bool	write_status(t_philo *philo, char *msg)
 {
-	return ((c >= 9 && c <= 13) || c == 32);
-}
+	size_t	curr_time;
 
-// get_time in milliseconds (current time)
-size_t	get_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	curr_time = get_time() - philo->table->time_start;
+	control_mutex(&philo->table->mtx_msg, LOCK);
+	printf("%zu %d %s\n", curr_time, philo->id, msg);
+	control_mutex(&philo->table->mtx_msg, UNLOCK);
+	return (SUCCESS);
 }

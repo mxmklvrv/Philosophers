@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/22 14:54:47 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/22 18:04:14 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ bool	create_threads(t_trattoria *table)
 	return (SUCCESS);
 }
 
-void	*dinner(void *arg)
-{
-}
+
 
 // join threads to wait others to finish simu
 void	join_threads(t_trattoria *table, int qty)

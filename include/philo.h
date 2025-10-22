@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/22 14:54:42 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/22 18:25:56 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,9 @@ size_t						get_time(void);
 bool						control_mutex(t_pmtx *mutex, t_oper oper);
 bool						init_mutexes(t_trattoria *table);
 void						destroy_forks(t_trattoria *table, int qty);
+
+// dinner
+void						*dinner(void *arg);
 
 // errors and free
 void						error_message(const char *msg);
