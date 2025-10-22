@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 17:18:26 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/08 14:50:31 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/22 14:51:47 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,13 @@ size_t	ft_strlen(const char *s)
 bool	ft_isspace(char c)
 {
 	return ((c >= 9 && c <= 13) || c == 32);
+}
+
+// get_time in milliseconds
+size_t	get_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }

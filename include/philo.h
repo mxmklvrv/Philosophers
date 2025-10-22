@@ -6,18 +6,19 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/12 14:43:56 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/22 14:54:42 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO
 # define PHILO
 
-# include <limits.h>  // INT_MAX
-# include <pthread.h> // mutex
-# include <stdbool.h> // true/false
-# include <stdio.h>   // printf
-# include <stdlib.h>  // malloc free
+# include <limits.h>    // INT_MAX
+# include <pthread.h>   // mutex
+# include <stdatomic.h> // atomic ints
+# include <stdbool.h>   // true/false
+# include <stdio.h>     // printf
+# include <stdlib.h>    // malloc free
 # include <sys/time.h>
 # include <unistd.h> // write usleep
 
@@ -38,6 +39,7 @@ typedef pthread_mutex_t		t_pmtx;
 # define ERROR_ZERO "Error: Number cannot be 0\n"
 # define ERROR_MEM "Error: memory allocation failed\n"
 # define ERROR_MTX_INIT "Error: mutex init failed\n"
+# define ERROR_TH_CREATE "Error: pthread creation failed\n"
 
 typedef enum e_oper
 {
@@ -63,6 +65,7 @@ typedef struct s_philo
 
 typedef struct s_trattoria
 {
+	atomic_int				stop;
 	int						philo_nbr;
 	size_t					time_to_die;
 	size_t					time_to_eat;
@@ -70,12 +73,10 @@ typedef struct s_trattoria
 	size_t					time_start;
 	int						portion_limit;
 	t_philo					*philos;
-    t_pmtx					*forks;
-    t_pmtx                  mtx_msg;
-    t_pmtx                  mtx_portion;
-    t_pmtx                  mtx_death;
-    
-    
+	t_pmtx					*forks;
+	t_pmtx					mtx_msg;
+	t_pmtx					mtx_portion;
+	t_pmtx					mtx_stop;
 }							t_trattoria;
 
 // main
@@ -89,7 +90,7 @@ bool						is_overflow_or_zero(const char *str);
 // init_data
 bool						init_data(int ac, char **av, t_trattoria *table);
 bool						init_table(int ac, char **av, t_trattoria *table);
-bool	                    init_mutexes(t_trattoria *table);
+bool						init_mutexes(t_trattoria *table);
 void						init_philos(t_trattoria *table);
 void						assign_forks(t_trattoria *table, t_philo *philo,
 								int i);
