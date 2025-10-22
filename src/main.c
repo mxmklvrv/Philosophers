@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/21 13:32:01 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/21 21:30:07 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,35 @@ bool create_threads(t_trattoria *table)
 {
     int i;
     
-    i = 0;
-    while (i < table->philo_nbr)
+    i = -1;
+    while (++i < table->philo_nbr)
     {
-        if(control_threads(&table->philos[i].thread, &table->philos[i], function, CREATE) == FAILURE)
+        if(control_threads(&table->philos[i].thread, &table->philos[i], dinner, CREATE) == FAILURE)
         {
             table->stop = 1;
-            // join threads
-            // return fail
+            return (join_threads(table, i), FAILURE);
         }
-        
     }
+    return (SUCCESS);
 }
-bool    join_threads(t_trattoria *table, int qty)
+
+void *dinner(void *arg)
+{
+    
+}
+
+
+
+
+
+// join threads to wait others to finish simu
+void    join_threads(t_trattoria *table, int qty)
 {
     int i;
 
-    i = 0;
-    while(i < qty)
-    {
-        if(control_threads(&table->philos[i].thread, NULL, NULL, JOIN) == FAILURE)
-            
-    }
+    i = -1;
+    while(++i < qty)
+        control_threads(&table->philos[i].thread, NULL, NULL, JOIN);
 }
 
 
@@ -148,6 +155,7 @@ bool	init_table(int ac, char **av, t_trattoria *table)
 	else
 		table->portion_limit = -1;
 	table->time_start = get_time();
+    table->stop = 0;
 	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
 	if (!table->philos)
 		return (error_message(ERROR_MEM), FAILURE);
@@ -236,7 +244,7 @@ void	destroy_forks(t_trattoria *table, int qty)
         control_mutex(&table->forks[i], DESTROY);
 }
 
-// wrapper function to control threads
+// wrapper function to control threads (whta if join is failed)
 bool    control_threads(pthread_t *th, void *data, void *(*function)(void *), t_oper oper)
 {
     if(oper == CREATE)
@@ -245,10 +253,8 @@ bool    control_threads(pthread_t *th, void *data, void *(*function)(void *), t_
             return (error_message(ERROR_TH_CREATE), FAILURE);
     }
     else if (oper == JOIN)
-    {
-        if (pthread_join(*th, NULL) != 0)
-            return (error_message(ERROR_TH_JOIN), FAILURE);
-    }
+        pthread_join(*th, NULL);
+    return (SUCCESS);
 }
 
 // wrapper function to control mutexes
