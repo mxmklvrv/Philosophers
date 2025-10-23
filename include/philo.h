@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/22 18:25:56 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/23 14:02:22 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_philo
 
 typedef struct s_trattoria
 {
-	atomic_int				stop;
+	atomic_int				finita_la_commedia;
 	int						philo_nbr;
 	size_t					time_to_die;
 	size_t					time_to_eat;
@@ -76,41 +76,50 @@ typedef struct s_trattoria
 	t_pmtx					*forks;
 	t_pmtx					mtx_msg;
 	t_pmtx					mtx_portion;
-	t_pmtx					mtx_stop;
+	t_pmtx					mtx_death;
 }							t_trattoria;
 
-// main
-int							main(int ac, char **av);
+// main 
+int	main(int ac, char **av);
 
-// validation
-bool						check_arg_count(int ac);
-bool						check_input(char **av);
-bool						is_overflow_or_zero(const char *str);
+// dirt
+bool	start_simulation(t_trattoria *table);
+bool	create_threads(t_trattoria *table);
+void	join_threads(t_trattoria *table, int qty);
+void	wipe_off(t_trattoria *table);
+void	destroy_forks(t_trattoria *table, int qty);
+bool	control_threads(pthread_t *th, void *data, void *(*function)(void *), t_oper oper);
+bool	control_mutex(t_pmtx *mutex, t_oper oper);
+void	free_allocs(t_trattoria *table);
+void	error_message(const char *msg);
 
-// init_data
-bool						init_data(int ac, char **av, t_trattoria *table);
-bool						init_table(int ac, char **av, t_trattoria *table);
-bool						init_mutexes(t_trattoria *table);
-void						init_philos(t_trattoria *table);
-void						assign_forks(t_trattoria *table, t_philo *philo,
-								int i);
-int							get_int(const char *str);
-size_t						get_time(void);
-// mutex
-bool						control_mutex(t_pmtx *mutex, t_oper oper);
-bool						init_mutexes(t_trattoria *table);
-void						destroy_forks(t_trattoria *table, int qty);
+// parsing 
+bool	check_arg_count(int ac);
+bool	check_input(char **av);
+bool	is_overflow_or_zero(const char *str);
+int     get_int(const char *str);
+
+// init
+bool	init_data(int ac, char **av, t_trattoria *table);
+bool	init_table(int ac, char **av, t_trattoria *table);
+bool	init_mutexes(t_trattoria *table);
+void	init_philos(t_trattoria *table);
+void	assign_forks(t_trattoria *table, t_philo *philo, int i);
+
 
 // dinner
-void						*dinner(void *arg);
+void	*dinner(void *arg);
+bool	write_status(t_philo *philo, char *msg);
 
-// errors and free
-void						error_message(const char *msg);
-void						free_allocs(t_trattoria *table);
 
-// utils
-size_t						ft_strlen(const char *s);
-bool						ft_isspace(char c);
-bool						ft_isdigit(char c);
+
+// utils 
+bool	ft_isdigit(char c);
+size_t	ft_strlen(const char *s);
+bool	ft_isspace(char c);
+size_t	get_time(void);
+void    precise_usleep(size_t ms);
+
+
 
 #endif
