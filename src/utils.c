@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 17:18:26 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/23 12:44:28 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/23 15:35:54 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,17 @@ size_t	get_time(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void    precise_usleep(size_t ms)
+// for now void
+void    precise_usleep(t_philo *philo, size_t ms)
 {
     size_t start;
     
     start = get_time();
     while(get_time() - start < ms)
+    {
+        if(dead_man_found(philo) == SUCCESS)
+            return ;
         usleep(500);
+    }
+    return (SUCCESS);
 }
