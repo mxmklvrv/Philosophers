@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:45:43 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/22 14:49:46 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/23 14:02:36 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	init_table(int ac, char **av, t_trattoria *table)
 	else
 		table->portion_limit = -1;
 	table->time_start = get_time();
-	table->stop = 0;
+	table->finita_la_commedia = 0;
 	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
 	if (!table->philos)
 		return (error_message(ERROR_MEM), FAILURE);
@@ -64,7 +64,7 @@ bool	init_mutexes(t_trattoria *table)
 		control_mutex(&table->mtx_msg, DESTROY);
 		return (destroy_forks(table, table->philo_nbr), FAILURE);
 	}
-	if (control_mutex(&table->mtx_stop, INIT) == FAILURE)
+	if (control_mutex(&table->mtx_death, INIT) == FAILURE)
 	{
 		control_mutex(&table->mtx_msg, DESTROY);
 		control_mutex(&table->mtx_portion, DESTROY);

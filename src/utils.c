@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 17:18:26 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/22 18:36:55 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/23 12:44:28 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,13 @@ size_t	get_time(void)
 
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+
+void    precise_usleep(size_t ms)
+{
+    size_t start;
+    
+    start = get_time();
+    while(get_time() - start < ms)
+        usleep(500);
 }
