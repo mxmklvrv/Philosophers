@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/23 14:02:22 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/24 09:52:52 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,14 @@ typedef pthread_mutex_t		t_pmtx;
 # define ERROR_MEM "Error: memory allocation failed\n"
 # define ERROR_MTX_INIT "Error: mutex init failed\n"
 # define ERROR_TH_CREATE "Error: pthread creation failed\n"
+
+// action message
+# define FORKING "has taken a fork"
+# define EATING "is eating"
+# define SLEEPING "is sleeping"
+# define THINKING "is thinking"
+# define DIED "died"
+
 
 typedef enum e_oper
 {
@@ -109,7 +117,14 @@ void	assign_forks(t_trattoria *table, t_philo *philo, int i);
 
 // dinner
 void	*dinner(void *arg);
+bool    think(t_philo *philo);
+bool    sleep(t_philo *philo);
+bool    eat(t_philo *philo);
+bool    take_fork(t_philo *philo);
 bool	write_status(t_philo *philo, char *msg);
+bool    dead_man_found(t_philo *philo);
+bool    sleeping(t_philo *philo);
+
 
 
 
@@ -118,7 +133,7 @@ bool	ft_isdigit(char c);
 size_t	ft_strlen(const char *s);
 bool	ft_isspace(char c);
 size_t	get_time(void);
-void    precise_usleep(size_t ms);
+void    precise_usleep(t_philo *philo, size_t ms);
 
 
 
