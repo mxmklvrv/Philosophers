@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/24 09:52:52 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:36:21 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef pthread_mutex_t		t_pmtx;
 # define THINKING "is thinking"
 # define DIED "died"
 
-
 typedef enum e_oper
 {
 	DESTROY,
@@ -87,54 +86,53 @@ typedef struct s_trattoria
 	t_pmtx					mtx_death;
 }							t_trattoria;
 
-// main 
-int	main(int ac, char **av);
+// main
+int							main(int ac, char **av);
 
 // dirt
-bool	start_simulation(t_trattoria *table);
-bool	create_threads(t_trattoria *table);
-void	join_threads(t_trattoria *table, int qty);
-void	wipe_off(t_trattoria *table);
-void	destroy_forks(t_trattoria *table, int qty);
-bool	control_threads(pthread_t *th, void *data, void *(*function)(void *), t_oper oper);
-bool	control_mutex(t_pmtx *mutex, t_oper oper);
-void	free_allocs(t_trattoria *table);
-void	error_message(const char *msg);
+bool						start_simulation(t_trattoria *table);
+bool						create_threads(t_trattoria *table);
+void						join_threads(t_trattoria *table, int qty);
+void						wipe_off(t_trattoria *table);
+void						destroy_forks(t_trattoria *table, int qty);
+bool						control_threads(pthread_t *th, void *data,
+								void *(*function)(void *), t_oper oper);
+bool						control_mutex(t_pmtx *mutex, t_oper oper);
+void						free_allocs(t_trattoria *table);
+void						error_message(const char *msg);
 
-// parsing 
-bool	check_arg_count(int ac);
-bool	check_input(char **av);
-bool	is_overflow_or_zero(const char *str);
-int     get_int(const char *str);
+// parsing
+bool						check_arg_count(int ac);
+bool						check_input(char **av);
+bool						is_overflow_or_zero(const char *str);
+int							get_int(const char *str);
 
 // init
-bool	init_data(int ac, char **av, t_trattoria *table);
-bool	init_table(int ac, char **av, t_trattoria *table);
-bool	init_mutexes(t_trattoria *table);
-void	init_philos(t_trattoria *table);
-void	assign_forks(t_trattoria *table, t_philo *philo, int i);
-
+bool						init_data(int ac, char **av, t_trattoria *table);
+bool						init_table(int ac, char **av, t_trattoria *table);
+bool						init_mutexes(t_trattoria *table);
+void						init_philos(t_trattoria *table);
+void						assign_forks(t_trattoria *table, t_philo *philo,
+								int i);
 
 // dinner
-void	*dinner(void *arg);
-bool    think(t_philo *philo);
-bool    sleep(t_philo *philo);
-bool    eat(t_philo *philo);
-bool    take_fork(t_philo *philo);
-bool	write_status(t_philo *philo, char *msg);
-bool    dead_man_found(t_philo *philo);
-bool    sleeping(t_philo *philo);
+void						*dinner(void *arg);
+bool						think(t_philo *philo);
+bool						sleep(t_philo *philo);
+bool						eat(t_philo *philo);
+bool						take_fork(t_philo *philo);
+bool						write_status(t_philo *philo, char *msg);
+bool						dead_man_found(t_philo *philo);
+bool						sleeping(t_philo *philo);
 
+// serving_dinner
+void						*serving_dinner(void *arg);
 
-
-
-// utils 
-bool	ft_isdigit(char c);
-size_t	ft_strlen(const char *s);
-bool	ft_isspace(char c);
-size_t	get_time(void);
-void    precise_usleep(t_philo *philo, size_t ms);
-
-
+// utils
+bool						ft_isdigit(char c);
+size_t						ft_strlen(const char *s);
+bool						ft_isspace(char c);
+size_t						get_time(void);
+void						precise_usleep(t_philo *philo, size_t ms);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/24 12:29:50 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:31:29 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,7 @@ bool	create_threads(t_trattoria *table)
 	return (SUCCESS);
 }
 
-void    *serving_dinner(void *arg)
-{
-    t_trattoria *table;
-    
-    table = (t_trattoria *)arg;
-    
-}
+
 
 
 
@@ -83,7 +77,6 @@ void	wipe_off(t_trattoria *table)
 	if (!table)
 		return ;
 	destroy_forks(table, table->philo_nbr);
-	// probably need to add thread reemover or so
 	control_mutex(&table->mtx_msg, DESTROY);
 	control_mutex(&table->mtx_death, DESTROY);
 	control_mutex(&table->mtx_portion, DESTROY);
