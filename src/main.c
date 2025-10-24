@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/23 14:03:47 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/24 12:29:50 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ bool	start_simulation(t_trattoria *table)
 bool	create_threads(t_trattoria *table)
 {
 	int	i;
+    pthread_t waiter;
 
 	i = -1;
 	while (++i < table->philo_nbr)
@@ -51,7 +52,17 @@ bool	create_threads(t_trattoria *table)
 			return (join_threads(table, i), FAILURE);
 		}
 	}
+    if(control_threads(&waiter, table, serving_dinner, CREATE) == FAILURE)
+        return (join_threads(table, table->philo_nbr), FAILURE);
 	return (SUCCESS);
+}
+
+void    *serving_dinner(void *arg)
+{
+    t_trattoria *table;
+    
+    table = (t_trattoria *)arg;
+    
 }
 
 
