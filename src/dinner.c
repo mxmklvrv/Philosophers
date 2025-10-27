@@ -6,13 +6,12 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:04:16 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/24 17:32:56 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/27 12:08:52 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-// think about mutex lock/unlock in case of death 
-
+// philo routine
 void	*dinner(void *arg)
 {
 	t_philo	*philo;
@@ -35,6 +34,7 @@ void	*dinner(void *arg)
 	return (NULL);
 }
 // waiter routin to check if someone is dead or pasta finita
+// addded 1ms delay to reduce cpu load 
 void	*serving_dinner(void *arg)
 {
 	t_trattoria	*table;
@@ -46,11 +46,11 @@ void	*serving_dinner(void *arg)
 			break ;
         if (bill_needed(table) == SUCCESS)
             break;
+        usleep(1000);
 	}
 	return (NULL);
 }
 // checks if all ate 
-// think about mutex lock/unlock in case of death 
 bool    bill_needed(t_trattoria *table)
 {
     int i;
@@ -87,7 +87,7 @@ bool	tomb_needed(t_trattoria *table)
 	{
 		control_mutex(&table->mtx_portion, LOCK);
 		if (still_alive(table, i) == FAILURE)
-			return (SUCCESS);
+			return (control_mutex(&table->mtx_portion, UNLOCK), SUCCESS);
 		control_mutex(&table->mtx_portion, UNLOCK);
 	}
     return (FAILURE);
@@ -102,8 +102,9 @@ bool	still_alive(t_trattoria *table, int i)
 	if (curr_time - table->philos[i].last_portion_time >= table->time_to_die)
 	{
 		write_status(&table->philos[i], DIED);
+        control_mutex(&table->mtx_death, LOCK);
 		table->finita_la_commedia = 1;
-		control_mutex(&table->mtx_portion, UNLOCK);
+        control_mutex(&table->mtx_death, UNLOCK);
 		return (FAILURE);
 	}
 	return (SUCCESS);

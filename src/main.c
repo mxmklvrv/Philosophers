@@ -6,15 +6,13 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/24 15:31:29 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:32:28 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 // TODO:
-// next is ti start digging in start of simulation
-// thread creation and join
 int	main(int ac, char **av)
 {
 	t_trattoria	table;
@@ -27,14 +25,16 @@ int	main(int ac, char **av)
 		return (FAILURE);
 	if (start_simulation(&table) == FAILURE)
 		return (FAILURE);
-	else
-		printf("ok\n"); // test output
+	return (SUCCESS);
 }
 
 bool	start_simulation(t_trattoria *table)
 {
 	if (creat_threads(table) == FAILURE)
 		return (wipe_off(table), FAILURE);
+    join_threads(table, table->philo_nbr);
+    wipe_off(table);
+    return (SUCCESS);
 }
 
 bool	create_threads(t_trattoria *table)
@@ -56,9 +56,6 @@ bool	create_threads(t_trattoria *table)
         return (join_threads(table, table->philo_nbr), FAILURE);
 	return (SUCCESS);
 }
-
-
-
 
 
 // join threads to wait others to finish simu
