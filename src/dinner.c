@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:04:16 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/27 17:00:42 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:18:43 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ bool	think(t_philo *philo)
 		return (FAILURE);
 	if (philo->table->philo_nbr % 2 != 0)
 	{
-		time_to_think = philo->table->time_to_eat / 4;
+		time_to_think = (philo->table->time_to_die - philo->table->time_to_eat
+				- philo->table->time_to_sleep) / 2;
+		if (time_to_think < 0)
+			time_to_think = 1;
 		precise_usleep(philo, time_to_think);
 	}
 	return (SUCCESS);

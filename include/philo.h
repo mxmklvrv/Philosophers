@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/27 17:09:24 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/27 17:10:54 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ typedef struct s_trattoria	t_trattoria;
 typedef pthread_mutex_t		t_pmtx;
 
 // error messages
-# define ERROR_AC "Wrong number of arguments\nUsage: [number_of_philosophers] "
+# define ERROR_AC "Invalid Wrong number of arguments\nUsage: [number_of_philosophers] "
 # define ERROR_AC1 "[time_to_die] [time_to_eat] [time_to_sleep] (optional "
 # define ERROR_AC2 "[number_of_times_each_philosopher_must_eat])\n"
-# define ERROR_EMPT "Error: Empty input\n"
-# define ERROR_INPT "Error: Only digidts allowed\n"
-# define ERROR_NGTV "Error: Negative numbers are not allowed\n"
-# define ERROR_OVRF "Error: Overflow detected\n"
-# define ERROR_ZERO "Error: Number cannot be 0\n"
-# define ERROR_MEM "Error: memory allocation failed\n"
-# define ERROR_MTX_INIT "Error: mutex init failed\n"
-# define ERROR_TH_CREATE "Error: pthread creation failed\n"
+# define ERROR_EMPT "Invalid: Empty input\n"
+# define ERROR_INPT "Invalid: Only digidts allowed\n"
+# define ERROR_NGTV "Invalid: Negative numbers are not allowed\n"
+# define ERROR_OVRF "Invalid: Overflow detected\n"
+# define ERROR_ZERO "Invalid: Number cannot be 0\n"
+# define ERROR_MEM "Invalid: memory allocation failed\n"
+# define ERROR_MTX_INIT "Invalid: mutex init failed\n"
+# define ERROR_TH_CREATE "Invalid: pthread creation failed\n"
 
 // action message
 # define FORKING "has taken a fork"
