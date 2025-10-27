@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 17:18:26 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/23 15:35:54 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/27 15:19:34 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,4 @@ void    precise_usleep(t_philo *philo, size_t ms)
             return ;
         usleep(500);
     }
-    return (SUCCESS);
 }

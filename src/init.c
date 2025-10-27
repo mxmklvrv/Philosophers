@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:45:43 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/27 13:32:26 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/27 16:00:04 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ bool	init_mutexes(t_trattoria *table)
 	}
 	return (SUCCESS);
 }
-
+// added last _portion time, yolo forgot 
 void	init_philos(t_trattoria *table)
 {
 	int		i;
@@ -85,6 +85,7 @@ void	init_philos(t_trattoria *table)
 		philo->id = i + 1;
 		philo->portion_count = 0;
 		philo->table = table;
+		philo->last_portion_time = table->time_start;
 		assign_forks(table, philo, i);
 		i++;
 	}

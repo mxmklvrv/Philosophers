@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/24 15:36:21 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/27 17:09:24 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_philo
 {
 	int						id;
 	int						portion_count;
-	int						last_portion_time;
+	size_t					last_portion_time;
 	pthread_t				thread;
 	t_pmtx					*first_fork;
 	t_pmtx					*second_fork;
@@ -72,7 +72,7 @@ typedef struct s_philo
 
 typedef struct s_trattoria
 {
-	atomic_int				finita_la_commedia;
+	int				finita_la_commedia;
 	int						philo_nbr;
 	size_t					time_to_die;
 	size_t					time_to_eat;
@@ -89,18 +89,6 @@ typedef struct s_trattoria
 // main
 int							main(int ac, char **av);
 
-// dirt
-bool						start_simulation(t_trattoria *table);
-bool						create_threads(t_trattoria *table);
-void						join_threads(t_trattoria *table, int qty);
-void						wipe_off(t_trattoria *table);
-void						destroy_forks(t_trattoria *table, int qty);
-bool						control_threads(pthread_t *th, void *data,
-								void *(*function)(void *), t_oper oper);
-bool						control_mutex(t_pmtx *mutex, t_oper oper);
-void						free_allocs(t_trattoria *table);
-void						error_message(const char *msg);
-
 // parsing
 bool						check_arg_count(int ac);
 bool						check_input(char **av);
@@ -115,18 +103,28 @@ void						init_philos(t_trattoria *table);
 void						assign_forks(t_trattoria *table, t_philo *philo,
 								int i);
 
+// controls
+bool						start_simulation(t_trattoria *table);
+bool						create_threads(t_trattoria *table);
+bool						control_threads(pthread_t *th, void *data,
+								void *(*function)(void *), t_oper oper);
+bool						control_mutex(t_pmtx *mutex, t_oper oper);
+
 // dinner
 void						*dinner(void *arg);
 bool						think(t_philo *philo);
-bool						sleep(t_philo *philo);
+bool						sleeping(t_philo *philo);
 bool						eat(t_philo *philo);
 bool						take_fork(t_philo *philo);
 bool						write_status(t_philo *philo, char *msg);
 bool						dead_man_found(t_philo *philo);
 bool						sleeping(t_philo *philo);
 
-// serving_dinner
+// waiter
 void						*serving_dinner(void *arg);
+bool						bill_needed(t_trattoria *table);
+bool						tomb_needed(t_trattoria *table);
+bool						still_alive(t_trattoria *table, int i);
 
 // utils
 bool						ft_isdigit(char c);
@@ -134,5 +132,12 @@ size_t						ft_strlen(const char *s);
 bool						ft_isspace(char c);
 size_t						get_time(void);
 void						precise_usleep(t_philo *philo, size_t ms);
+
+// cleaning
+void						wipe_off(t_trattoria *table);
+void						destroy_forks(t_trattoria *table, int qty);
+void						join_threads(t_trattoria *table, int qty);
+void						free_allocs(t_trattoria *table);
+void						error_message(const char *msg);
 
 #endif
