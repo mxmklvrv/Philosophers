@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:08:42 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 12:36:45 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/28 14:19:02 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ bool	start_simulation(t_trattoria *table)
 	if (create_threads(table) == FAILURE)
 		return (wipe_off(table), FAILURE);
 	if (join_threads(table, table->philo_nbr) == FAILURE)
-        return (wipe_off(table), FAILURE);
+		return (wipe_off(table), FAILURE);
 	wipe_off(table);
 	return (SUCCESS);
 }
@@ -36,21 +36,21 @@ bool	create_threads(t_trattoria *table)
 		if (control_threads(&table->philos[i].thread, &table->philos[i], dinner,
 				CREATE) == FAILURE)
 		{
-            control_mutex(&table->mtx_death, LOCK);
+			control_mutex(&table->mtx_death, LOCK);
 			table->finita_la_commedia = 1;
-            control_mutex(&table->mtx_death, UNLOCK);
-            if (join_threads(table, i) == FAILURE)
-                return (FAILURE);
-            return (FAILURE);
+			control_mutex(&table->mtx_death, UNLOCK);
+			if (join_threads(table, i) == FAILURE)
+				return (FAILURE);
+			return (FAILURE);
 		}
 	}
 	if (control_threads(&waiter, table, serving_dinner, CREATE) == FAILURE)
-    {
-        if (join_threads(table, table->philo_nbr) == FAILURE)
-            return (FAILURE);
-    }
-    if (control_threads(&waiter, NULL, NULL, JOIN) == FAILURE)
-        return (FAILURE);
+	{
+		if (join_threads(table, table->philo_nbr) == FAILURE)
+			return (FAILURE);
+	}
+	if (control_threads(&waiter, NULL, NULL, JOIN) == FAILURE)
+		return (FAILURE);
 	return (SUCCESS);
 }
 
@@ -64,10 +64,10 @@ bool	control_threads(pthread_t *th, void *data, void *(*function)(void *),
 			return (error_message(ERROR_TH_CREATE), FAILURE);
 	}
 	else if (oper == JOIN)
-    {
-        if(pthread_join(*th, NULL) != 0)
-            return (error_message(ERROR_TH_JOIN), FAILURE);
-    }
+	{
+		if (pthread_join(*th, NULL) != 0)
+			return (error_message(ERROR_TH_JOIN), FAILURE);
+	}
 	return (SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:04:16 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 12:49:43 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:13:47 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	*dinner(void *arg)
 	return (NULL);
 }
 
-// not sure about delay time tbh
 bool	think(t_philo *philo)
 {
 	size_t	time_to_think;
@@ -47,7 +46,7 @@ bool	think(t_philo *philo)
 		return (FAILURE);
 	if (philo->table->philo_nbr % 2 != 0)
 	{
-		time_to_think = philo->table->time_to_eat * 0.7;
+		time_to_think = 5;
 		precise_usleep(philo, time_to_think);
 	}
 	return (SUCCESS);
@@ -107,13 +106,15 @@ bool	write_status(t_philo *philo, char *msg)
 {
 	size_t	curr_time;
 
-	curr_time = get_time() - philo->table->time_start;
-	control_mutex(&philo->table->mtx_msg, LOCK);
+	control_mutex(&philo->table->mtx_death, LOCK);
 	if (philo->table->finita_la_commedia == 1)
 	{
-		control_mutex(&philo->table->mtx_msg, UNLOCK);
+		control_mutex(&philo->table->mtx_death, UNLOCK);
 		return (FAILURE);
 	}
+	control_mutex(&philo->table->mtx_death, UNLOCK);
+	control_mutex(&philo->table->mtx_msg, LOCK);
+	curr_time = get_time() - philo->table->time_start;
 	printf("%zu %d %s\n", curr_time, philo->id, msg);
 	control_mutex(&philo->table->mtx_msg, UNLOCK);
 	return (SUCCESS);
@@ -130,10 +131,3 @@ bool	dead_man_found(t_philo *philo)
 	control_mutex(&philo->table->mtx_death, UNLOCK);
 	return (FAILURE);
 }
-
-// bool	sleeping(t_philo *philo)
-// {
-// 	if (write_status(philo, SLEEPING) == FAILURE)
-// 		return (FAILURE);
-// 	precise_usleep(philo, philo->table->time_to_sleep);
-// }
