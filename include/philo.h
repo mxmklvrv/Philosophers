@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/27 17:10:54 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:06:52 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef pthread_mutex_t		t_pmtx;
 # define ERROR_MEM "Invalid: memory allocation failed\n"
 # define ERROR_MTX_INIT "Invalid: mutex init failed\n"
 # define ERROR_TH_CREATE "Invalid: pthread creation failed\n"
+# define ERROR_TH_JOIN "Error: pthread join failed\n"
 
 // action message
 # define FORKING "has taken a fork"
@@ -136,7 +137,7 @@ void						precise_usleep(t_philo *philo, size_t ms);
 // cleaning
 void						wipe_off(t_trattoria *table);
 void						destroy_forks(t_trattoria *table, int qty);
-void						join_threads(t_trattoria *table, int qty);
+bool						join_threads(t_trattoria *table, int qty);
 void						free_allocs(t_trattoria *table);
 void						error_message(const char *msg);
 
