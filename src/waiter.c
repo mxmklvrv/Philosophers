@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:03:51 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 21:07:17 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/28 21:19:42 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,15 @@ bool	still_alive(t_trattoria *table, int i)
 	{
 		control_mutex(&table->mtx_death, LOCK);
 		if(table->finita_la_commedia == 0)
+        {
             table->finita_la_commedia = 1;
-        control_mutex(&table->mtx_death, UNLOCK);
-        control_mutex(&table->mtx_msg, LOCK);
-        printf("%zu %d %s\n", curr_time - table->time_start, table->philos[i].id, DIED);
-		control_mutex(&table->mtx_msg, UNLOCK);
+            control_mutex(&table->mtx_death, UNLOCK);
+            control_mutex(&table->mtx_msg, LOCK);
+            printf("%zu %d %s\n", curr_time - table->time_start, table->philos[i].id, DIED);
+		    control_mutex(&table->mtx_msg, UNLOCK);
+        }
+        else
+            control_mutex(&table->mtx_death, UNLOCK);
 		return (FAILURE);
 	}
 	return (SUCCESS);
