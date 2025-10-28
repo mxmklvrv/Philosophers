@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:03:51 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/27 15:04:45 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/28 17:23:42 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	*serving_dinner(void *arg)
 			break ;
 		if (bill_needed(table) == SUCCESS)
 			break ;
-		usleep(1000);
+		usleep(500);
 	}
 	return (NULL);
 }
@@ -66,7 +66,7 @@ bool	tomb_needed(t_trattoria *table)
 	{
 		control_mutex(&table->mtx_portion, LOCK);
 		if (still_alive(table, i) == FAILURE)
-			return (control_mutex(&table->mtx_portion, UNLOCK), SUCCESS);
+			return (SUCCESS);
 		control_mutex(&table->mtx_portion, UNLOCK);
 	}
 	return (FAILURE);
@@ -84,6 +84,7 @@ bool	still_alive(t_trattoria *table, int i)
 		control_mutex(&table->mtx_death, LOCK);
 		table->finita_la_commedia = 1;
 		control_mutex(&table->mtx_death, UNLOCK);
+		control_mutex(&table->mtx_portion, UNLOCK);
 		return (FAILURE);
 	}
 	return (SUCCESS);

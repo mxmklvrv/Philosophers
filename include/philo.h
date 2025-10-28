@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 12:06:52 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:58:57 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ bool						ft_isdigit(char c);
 size_t						ft_strlen(const char *s);
 bool						ft_isspace(char c);
 size_t						get_time(void);
-void						precise_usleep(t_philo *philo, size_t ms);
+bool						precise_usleep(t_philo *philo, size_t ms);
 
 // cleaning
 void						wipe_off(t_trattoria *table);

@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:04:16 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 16:13:47 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/28 17:08:14 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	*dinner(void *arg)
 	if (philo->id % 2 == 0)
 	{
 		think(philo);
-		precise_usleep(philo, philo->table->time_to_eat / 2);
+		if (precise_usleep(philo, philo->table->time_to_eat / 2) == FAILURE)
+			return (NULL);
 	}
 	while (dead_man_found(philo) == FAILURE)
 	{
@@ -47,7 +48,8 @@ bool	think(t_philo *philo)
 	if (philo->table->philo_nbr % 2 != 0)
 	{
 		time_to_think = 5;
-		precise_usleep(philo, time_to_think);
+		if (precise_usleep(philo, time_to_think) == FAILURE)
+			return (FAILURE);
 	}
 	return (SUCCESS);
 }
@@ -56,7 +58,8 @@ bool	sleeping(t_philo *philo)
 {
 	if (write_status(philo, SLEEPING) == FAILURE)
 		return (FAILURE);
-	precise_usleep(philo, philo->table->time_to_sleep);
+	if (precise_usleep(philo, philo->table->time_to_sleep) == FAILURE)
+		return (FAILURE);
 	return (SUCCESS);
 }
 
@@ -72,7 +75,12 @@ bool	eat(t_philo *philo)
 	philo->last_portion_time = get_time();
 	philo->portion_count++;
 	control_mutex(&philo->table->mtx_portion, UNLOCK);
-	precise_usleep(philo, philo->table->time_to_eat);
+	if (precise_usleep(philo, philo->table->time_to_eat) == FAILURE)
+	{
+		control_mutex(philo->first_fork, UNLOCK);
+		control_mutex(philo->second_fork, UNLOCK);
+		return (FAILURE);
+	}
 	control_mutex(philo->first_fork, UNLOCK);
 	control_mutex(philo->second_fork, UNLOCK);
 	return (SUCCESS);
@@ -88,7 +96,11 @@ bool	take_fork(t_philo *philo)
 	}
 	if (philo->table->philo_nbr == 1)
 	{
-		precise_usleep(philo, philo->table->time_to_die);
+		if (precise_usleep(philo, philo->table->time_to_die) == FAILURE)
+		{
+			control_mutex(philo->first_fork, UNLOCK);
+			return (FAILURE);
+		}
 		control_mutex(philo->first_fork, UNLOCK);
 		return (FAILURE);
 	}
