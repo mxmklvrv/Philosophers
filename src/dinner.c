@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:04:16 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 17:08:14 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/28 20:12:18 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ bool	take_fork(t_philo *philo)
 	}
 	return (SUCCESS);
 }
-
+// mutex death wraps around mutex msg 28.10 update, not tested
 bool	write_status(t_philo *philo, char *msg)
 {
 	size_t	curr_time;
@@ -124,11 +124,11 @@ bool	write_status(t_philo *philo, char *msg)
 		control_mutex(&philo->table->mtx_death, UNLOCK);
 		return (FAILURE);
 	}
-	control_mutex(&philo->table->mtx_death, UNLOCK);
 	control_mutex(&philo->table->mtx_msg, LOCK);
 	curr_time = get_time() - philo->table->time_start;
 	printf("%zu %d %s\n", curr_time, philo->id, msg);
 	control_mutex(&philo->table->mtx_msg, UNLOCK);
+    control_mutex(&philo->table->mtx_death, UNLOCK);
 	return (SUCCESS);
 }
 
