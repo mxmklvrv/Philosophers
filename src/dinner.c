@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:04:16 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 20:12:18 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/29 19:42:42 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@ void	*dinner(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 != 0)
 	{
 		think(philo);
-		if (precise_usleep(philo, philo->table->time_to_eat / 2) == FAILURE)
-			return (NULL);
+		precise_usleep(philo, philo->table->time_to_eat / 2);
 	}
 	while (dead_man_found(philo) == FAILURE)
 	{
@@ -48,8 +47,7 @@ bool	think(t_philo *philo)
 	if (philo->table->philo_nbr % 2 != 0)
 	{
 		time_to_think = 5;
-		if (precise_usleep(philo, time_to_think) == FAILURE)
-			return (FAILURE);
+		precise_usleep(philo, time_to_think);
 	}
 	return (SUCCESS);
 }
@@ -58,11 +56,11 @@ bool	sleeping(t_philo *philo)
 {
 	if (write_status(philo, SLEEPING) == FAILURE)
 		return (FAILURE);
-	if (precise_usleep(philo, philo->table->time_to_sleep) == FAILURE)
-		return (FAILURE);
+	precise_usleep(philo, philo->table->time_to_sleep);
 	return (SUCCESS);
 }
 
+// at what time we should count lst portion time and increase portion limit?
 bool	eat(t_philo *philo)
 {
 	if (write_status(philo, EATING) == FAILURE)
@@ -75,12 +73,7 @@ bool	eat(t_philo *philo)
 	philo->last_portion_time = get_time();
 	philo->portion_count++;
 	control_mutex(&philo->table->mtx_portion, UNLOCK);
-	if (precise_usleep(philo, philo->table->time_to_eat) == FAILURE)
-	{
-		control_mutex(philo->first_fork, UNLOCK);
-		control_mutex(philo->second_fork, UNLOCK);
-		return (FAILURE);
-	}
+	precise_usleep(philo, philo->table->time_to_eat);
 	control_mutex(philo->first_fork, UNLOCK);
 	control_mutex(philo->second_fork, UNLOCK);
 	return (SUCCESS);
@@ -96,11 +89,7 @@ bool	take_fork(t_philo *philo)
 	}
 	if (philo->table->philo_nbr == 1)
 	{
-		if (precise_usleep(philo, philo->table->time_to_die) == FAILURE)
-		{
-			control_mutex(philo->first_fork, UNLOCK);
-			return (FAILURE);
-		}
+		precise_usleep(philo, philo->table->time_to_die);
 		control_mutex(philo->first_fork, UNLOCK);
 		return (FAILURE);
 	}
@@ -128,7 +117,7 @@ bool	write_status(t_philo *philo, char *msg)
 	curr_time = get_time() - philo->table->time_start;
 	printf("%zu %d %s\n", curr_time, philo->id, msg);
 	control_mutex(&philo->table->mtx_msg, UNLOCK);
-    control_mutex(&philo->table->mtx_death, UNLOCK);
+	control_mutex(&philo->table->mtx_death, UNLOCK);
 	return (SUCCESS);
 }
 
