@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 18:04:16 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/29 19:42:42 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 15:27:29 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	*dinner(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 != 0)
+	if (philo->id % 2 == 0)
 	{
 		think(philo);
 		precise_usleep(philo, philo->table->time_to_eat / 2);
@@ -46,8 +46,12 @@ bool	think(t_philo *philo)
 		return (FAILURE);
 	if (philo->table->philo_nbr % 2 != 0)
 	{
-		time_to_think = 5;
-		precise_usleep(philo, time_to_think);
+		time_to_think = (philo->table->time_to_die - philo->table->time_to_eat
+				- philo->table->time_to_sleep) / 2;
+		if ((long)time_to_think > 0)
+			precise_usleep(philo, time_to_think);
+		else
+			precise_usleep(philo, 1);
 	}
 	return (SUCCESS);
 }

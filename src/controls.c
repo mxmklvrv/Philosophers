@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:08:42 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 14:19:02 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:51:22 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ bool	start_simulation(t_trattoria *table)
 		return (wipe_off(table), FAILURE);
 	if (join_threads(table, table->philo_nbr) == FAILURE)
 		return (wipe_off(table), FAILURE);
-	wipe_off(table);
 	return (SUCCESS);
 }
 

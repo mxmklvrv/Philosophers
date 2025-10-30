@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/27 15:15:11 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:40:54 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ int	main(int ac, char **av)
 		return (FAILURE);
 	if (start_simulation(&table) == FAILURE)
 		return (FAILURE);
+	wipe_off(&table);
 	return (SUCCESS);
 }
-

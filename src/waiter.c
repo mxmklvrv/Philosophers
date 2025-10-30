@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:03:51 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 21:19:42 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:14:58 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,26 +71,6 @@ bool	tomb_needed(t_trattoria *table)
 	}
 	return (FAILURE);
 }
-
-// checks if the time from the last portion >= death time
-/*
-bool	still_alive(t_trattoria *table, int i)
-{
-	size_t	curr_time;
-
-	curr_time = get_time();
-	if (curr_time - table->philos[i].last_portion_time >= table->time_to_die)
-	{
-		write_status(&table->philos[i], DIED);
-		control_mutex(&table->mtx_death, LOCK);
-		table->finita_la_commedia = 1;
-		control_mutex(&table->mtx_death, UNLOCK);
-		control_mutex(&table->mtx_portion, UNLOCK);
-		return (FAILURE);
-	}
-	return (SUCCESS);
-}
-*/
 
 // new still alive function which declears death as well. 
 bool	still_alive(t_trattoria *table, int i)

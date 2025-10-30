@@ -6,13 +6,13 @@
 #    By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/02 17:02:31 by mklevero          #+#    #+#              #
-#    Updated: 2025/10/27 15:13:47 by mklevero         ###   ########.fr        #
+#    Updated: 2025/10/30 14:29:45 by mklevero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = cc 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror 
 
 OBJ_DIR = obj/
 SRC_DIR = src/

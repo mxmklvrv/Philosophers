@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:13:21 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/28 11:36:09 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:38:22 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	wipe_off(t_trattoria *table)
 	free_allocs(table);
 }
 
-// destroy forks 
+// destroy forks
 void	destroy_forks(t_trattoria *table, int qty)
 {
 	int	i;
@@ -41,20 +41,22 @@ bool	join_threads(t_trattoria *table, int qty)
 
 	i = -1;
 	while (++i < qty)
-    {
-        if(control_threads(&table->philos[i].thread, NULL, NULL, JOIN) == FAILURE)
-            return (FAILURE);
-    }
-	return (SUCCESS);	
+	{
+		if (control_threads(&table->philos[i].thread, NULL, NULL,
+				JOIN) == FAILURE)
+			return (FAILURE);
+	}
+	return (SUCCESS);
 }
 
 // free allocated memmory for *philos and *forks
 void	free_allocs(t_trattoria *table)
-{
+{	
 	if (table->forks)
 		free(table->forks);
 	if (table->philos)
 		free(table->philos);
+	
 }
 
 void	error_message(const char *msg)
