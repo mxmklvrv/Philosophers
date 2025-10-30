@@ -6,13 +6,12 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:59:41 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 14:40:54 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 20:17:35 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// TODO:
 int	main(int ac, char **av)
 {
 	t_trattoria	table;

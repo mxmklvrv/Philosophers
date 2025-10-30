@@ -6,7 +6,7 @@
 #    By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/02 17:02:31 by mklevero          #+#    #+#              #
-#    Updated: 2025/10/30 14:29:45 by mklevero         ###   ########.fr        #
+#    Updated: 2025/10/30 20:16:22 by mklevero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ SRC_DIR = src/
 HEADERS = -I ./include
 PHILO_HEAD = ./include/philo.h
 
-SRC = main.c utils.c parsing.c init.c dinner.c waiter.c controls.c cleaning.c
+SRC = main.c utils.c parsing.c init.c dinner.c waiter.c controls.c cleaning.c \
+dinner_helpers.c
 
 OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 .SECONDARY: $(OBJS)

@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:08:42 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 14:51:22 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 20:13:10 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ bool	start_simulation(t_trattoria *table)
 	return (SUCCESS);
 }
 
-// philo and waiter threads creation
-// not sure about waiter join
 bool	create_threads(t_trattoria *table)
 {
 	int			i;

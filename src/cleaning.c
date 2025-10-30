@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:13:21 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 14:38:22 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 20:13:05 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,11 @@ bool	join_threads(t_trattoria *table, int qty)
 
 // free allocated memmory for *philos and *forks
 void	free_allocs(t_trattoria *table)
-{	
+{
 	if (table->forks)
 		free(table->forks);
 	if (table->philos)
 		free(table->philos);
-	
 }
 
 void	error_message(const char *msg)

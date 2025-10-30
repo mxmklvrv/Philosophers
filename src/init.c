@@ -6,13 +6,12 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:45:43 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/27 16:00:04 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 20:20:11 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// init all the data
 bool	init_data(int ac, char **av, t_trattoria *table)
 {
 	if (init_table(ac, av, table) == FAILURE)
@@ -23,7 +22,6 @@ bool	init_data(int ac, char **av, t_trattoria *table)
 	return (SUCCESS);
 }
 
-// init table struct
 bool	init_table(int ac, char **av, t_trattoria *table)
 {
 	table->philo_nbr = get_int(av[1]);
@@ -45,7 +43,6 @@ bool	init_table(int ac, char **av, t_trattoria *table)
 	return (SUCCESS);
 }
 
-// maybe mass mutex destroyer so i pass table and 3 more of mutexes
 bool	init_mutexes(t_trattoria *table)
 {
 	int	i;
@@ -72,7 +69,7 @@ bool	init_mutexes(t_trattoria *table)
 	}
 	return (SUCCESS);
 }
-// added last _portion time, yolo forgot 
+
 void	init_philos(t_trattoria *table)
 {
 	int		i;
@@ -91,16 +88,17 @@ void	init_philos(t_trattoria *table)
 	}
 }
 
+// odd right left, even left right
 void	assign_forks(t_trattoria *table, t_philo *philo, int i)
 {
-	if (philo->id % 2) // odd
+	if (philo->id % 2)
 	{
-		philo->first_fork = &table->forks[(i + 1) % table->philo_nbr]; // rigth
-		philo->second_fork = &table->forks[i];                         // left
+		philo->first_fork = &table->forks[(i + 1) % table->philo_nbr];
+		philo->second_fork = &table->forks[i];
 	}
-	else // even
+	else
 	{
-		philo->first_fork = &table->forks[i];                           // left
-		philo->second_fork = &table->forks[(i + 1) % table->philo_nbr]; // right
+		philo->first_fork = &table->forks[i];
+		philo->second_fork = &table->forks[(i + 1) % table->philo_nbr];
 	}
 }

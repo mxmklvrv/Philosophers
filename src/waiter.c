@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:03:51 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 14:14:58 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/30 20:20:25 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	*serving_dinner(void *arg)
 	}
 	return (NULL);
 }
+
 // checks if all ate
 bool	bill_needed(t_trattoria *table)
 {
@@ -72,7 +73,6 @@ bool	tomb_needed(t_trattoria *table)
 	return (FAILURE);
 }
 
-// new still alive function which declears death as well. 
 bool	still_alive(t_trattoria *table, int i)
 {
 	size_t	curr_time;
@@ -81,16 +81,15 @@ bool	still_alive(t_trattoria *table, int i)
 	if (curr_time - table->philos[i].last_portion_time >= table->time_to_die)
 	{
 		control_mutex(&table->mtx_death, LOCK);
-		if(table->finita_la_commedia == 0)
-        {
-            table->finita_la_commedia = 1;
-            control_mutex(&table->mtx_death, UNLOCK);
-            control_mutex(&table->mtx_msg, LOCK);
-            printf("%zu %d %s\n", curr_time - table->time_start, table->philos[i].id, DIED);
-		    control_mutex(&table->mtx_msg, UNLOCK);
-        }
-        else
-            control_mutex(&table->mtx_death, UNLOCK);
+		if (table->finita_la_commedia == 0)
+		{
+			table->finita_la_commedia = 1;
+			control_mutex(&table->mtx_msg, LOCK);
+			printf("%zu %d %s\n", curr_time - table->time_start,
+				table->philos[i].id, DIED);
+			control_mutex(&table->mtx_msg, UNLOCK);
+		}
+		control_mutex(&table->mtx_death, UNLOCK);
 		return (FAILURE);
 	}
 	return (SUCCESS);
