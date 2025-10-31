@@ -6,14 +6,12 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:03:51 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 20:20:25 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:46:00 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// waiter routin to check if someone is dead or pasta finita
-// addded 1ms delay to reduce cpu load
 void	*serving_dinner(void *arg)
 {
 	t_trattoria	*table;
@@ -30,7 +28,6 @@ void	*serving_dinner(void *arg)
 	return (NULL);
 }
 
-// checks if all ate
 bool	bill_needed(t_trattoria *table)
 {
 	int	i;
@@ -57,7 +54,6 @@ bool	bill_needed(t_trattoria *table)
 	return (FAILURE);
 }
 
-// checks if someone is dead
 bool	tomb_needed(t_trattoria *table)
 {
 	int	i;

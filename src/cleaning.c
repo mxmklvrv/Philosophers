@@ -6,13 +6,12 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:13:21 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 20:13:05 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:45:32 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// full quit
 void	wipe_off(t_trattoria *table)
 {
 	if (!table)
@@ -24,7 +23,6 @@ void	wipe_off(t_trattoria *table)
 	free_allocs(table);
 }
 
-// destroy forks
 void	destroy_forks(t_trattoria *table, int qty)
 {
 	int	i;
@@ -34,7 +32,6 @@ void	destroy_forks(t_trattoria *table, int qty)
 		control_mutex(&table->forks[i], DESTROY);
 }
 
-// join threads to wait others to finish dinner
 bool	join_threads(t_trattoria *table, int qty)
 {
 	int	i;
@@ -49,7 +46,6 @@ bool	join_threads(t_trattoria *table, int qty)
 	return (SUCCESS);
 }
 
-// free allocated memmory for *philos and *forks
 void	free_allocs(t_trattoria *table)
 {
 	if (table->forks)

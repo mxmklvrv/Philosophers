@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:49:32 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 20:17:41 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:46:34 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ bool	check_input(char **av)
 	return (SUCCESS);
 }
 
-// checks int for 0 and overflow
 bool	is_overflow_or_zero(const char *str)
 {
 	long long	res;
@@ -70,7 +69,6 @@ bool	is_overflow_or_zero(const char *str)
 	return (SUCCESS);
 }
 
-// get int from the input
 int	get_int(const char *str)
 {
 	int	i;

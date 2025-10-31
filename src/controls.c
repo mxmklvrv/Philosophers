@@ -6,17 +6,18 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:08:42 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 20:13:10 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:45:42 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// start simulation
 bool	start_simulation(t_trattoria *table)
 {
 	if (create_threads(table) == FAILURE)
 		return (wipe_off(table), FAILURE);
+    if (create_waiter_thread(table) == FAILURE)
+        return (wipe_off(table), FAILURE);
 	if (join_threads(table, table->philo_nbr) == FAILURE)
 		return (wipe_off(table), FAILURE);
 	return (SUCCESS);
@@ -25,7 +26,6 @@ bool	start_simulation(t_trattoria *table)
 bool	create_threads(t_trattoria *table)
 {
 	int			i;
-	pthread_t	waiter;
 
 	i = -1;
 	while (++i < table->philo_nbr)
@@ -41,17 +41,33 @@ bool	create_threads(t_trattoria *table)
 			return (FAILURE);
 		}
 	}
-	if (control_threads(&waiter, table, serving_dinner, CREATE) == FAILURE)
+	return (SUCCESS);
+}
+
+bool    create_waiter_thread(t_trattoria *table)
+{
+    pthread_t	waiter;
+    
+    if (control_threads(&waiter, table, serving_dinner, CREATE) == FAILURE)
 	{
+        control_mutex(&table->mtx_death, LOCK);
+		table->finita_la_commedia = 1;
+		control_mutex(&table->mtx_death, UNLOCK);
 		if (join_threads(table, table->philo_nbr) == FAILURE)
 			return (FAILURE);
 	}
 	if (control_threads(&waiter, NULL, NULL, JOIN) == FAILURE)
+	{
+		control_mutex(&table->mtx_death, LOCK);
+		table->finita_la_commedia = 1;
+		control_mutex(&table->mtx_death, UNLOCK);
+        if (join_threads(table, table->philo_nbr) == FAILURE)
+				return (FAILURE);
 		return (FAILURE);
-	return (SUCCESS);
+	}
+    return (SUCCESS);
 }
 
-// wrapper function to control threads
 bool	control_threads(pthread_t *th, void *data, void *(*function)(void *),
 		t_oper oper)
 {
@@ -68,7 +84,6 @@ bool	control_threads(pthread_t *th, void *data, void *(*function)(void *),
 	return (SUCCESS);
 }
 
-// wrapper function to control mutexes
 bool	control_mutex(t_pmtx *mutex, t_oper oper)
 {
 	if (oper == INIT)
