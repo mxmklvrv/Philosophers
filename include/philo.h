@@ -6,7 +6,7 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:53:02 by mklevero          #+#    #+#             */
-/*   Updated: 2025/10/30 20:23:36 by mklevero         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:35:20 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void						assign_forks(t_trattoria *table, t_philo *philo,
 // controls
 bool						start_simulation(t_trattoria *table);
 bool						create_threads(t_trattoria *table);
+bool                        create_waiter_thread(t_trattoria *table);
 bool						control_threads(pthread_t *th, void *data,
 								void *(*function)(void *), t_oper oper);
 bool						control_mutex(t_pmtx *mutex, t_oper oper);
@@ -116,9 +117,10 @@ bool						think(t_philo *philo);
 bool						sleeping(t_philo *philo);
 bool						eat(t_philo *philo);
 bool						take_fork(t_philo *philo);
+
+// dinner helpers
 bool						write_status(t_philo *philo, char *msg);
 bool						dead_man_found(t_philo *philo);
-bool						sleeping(t_philo *philo);
 
 // waiter
 void						*serving_dinner(void *arg);
